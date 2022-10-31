@@ -1,6 +1,9 @@
 // Pinball.cpp : Definisce il punto di ingresso dell'applicazione.
 //
 
+#define _CRT_RAND_S
+
+#include "stdlib.h"
 #include "pch.h"
 #include "framework.h"
 #include "Pinball.h"
@@ -137,12 +140,17 @@ ULARGE_INTEGER DisegnaPallina(HWND hWnd, HDC hdc)
     WCHAR strTempo1[40];
     PCWSTR testo;
     RECT rectFinestra;
-
+    unsigned int number;
+    
     GetClientRect(hWnd, &rectFinestra);
     // legge l'ora attuale
     valTempo = leggiOra();
+    // crea un numero casuale
+    number = rand();
+    number = number % 200;
     // prepara la stringa da scrivere
-    _ui64toa_s(valTempo.QuadPart, strTempo, 30, 10);
+    // _ui64toa_s(valTempo.QuadPart, strTempo, 30, 10);
+    _itoa_s(pallaUgo.velY, strTempo, 10);
     mbstowcs_s(&a, strTempo1, 30, strTempo, 30);
     testo = strTempo1;
     // scrive la stringa
@@ -159,20 +167,20 @@ ULARGE_INTEGER DisegnaPallina(HWND hWnd, HDC hdc)
             deltaX = rectFinestra.right - (pallaUgo.x + pallaUgo.diam);
             if (deltaX < 0) {
                 pallaUgo.x += deltaX;
-                pallaUgo.velX = -pallaUgo.velX;
+                pallaUgo.velX = -pallaUgo.velX+number;
             }
             deltaY = rectFinestra.bottom - (pallaUgo.y + pallaUgo.diam);
             if (deltaY < 0) {
                 pallaUgo.y += deltaY;
-                pallaUgo.velY = -pallaUgo.velY;
+                pallaUgo.velY = -pallaUgo.velY+number;
             }
             if (pallaUgo.x < 0) {
                 pallaUgo.x = -pallaUgo.x;
-                pallaUgo.velX = -pallaUgo.velX;
+                pallaUgo.velX = -pallaUgo.velX+number;
             }
             if (pallaUgo.y < 0) {
                 pallaUgo.y = -pallaUgo.y;
-                pallaUgo.velY = -pallaUgo.velY;
+                pallaUgo.velY = -pallaUgo.velY+number;
             }
             ultDis = valTempo;
         }
